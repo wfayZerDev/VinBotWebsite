@@ -1,0 +1,148 @@
+import { SparkleIcon } from '@/components/SparkleIcon'
+
+export { Layout as default } from '@/components/Layout'
+
+---
+
+![](@/images/first-notion.png)
+
+## Project Launch [VinBot] {{ date: '2024-01-20T00:00Z' }}
+
+To begin, we set up a **_Notion_** to organize our project with a schedule of assigned tasks, etc...
+
+Then, as a next step, we had to analyze the requests sent and received by our browser. This allowed us to rebuild the entire Vinted API and map it out entirely.
+
+As a third step, for each discovered endpoint, we recorded it in a shared workspace on the **_Postman_** software.
+
+The first major issue we encountered is as follows: our **_bearer token_** expires after an hour, yet we want to obtain **_bearer tokens_** that regenerate automatically without having to do it manually. This is where we found a **[POST]** endpoint that allowed us to generate public tokens.
+
+![](@/images/route.png)
+
+
+### <SparkleIcon /> Daily Task List
+
+- 📝 Setting up the project on Notion
+- 👀 Analyzing and researching the various Endpoints of the Vinted API
+- ⚙️ Testing the different Endpoints via the "Postman" tool
+- 🚨 First obstacle encountered: our token expires after an hour
+
+---
+
+![](@/images/dayTwo.png)
+
+## Task Separation {{ date: '2024-01-21T00:00Z' }}
+
+Starting from the second day, we decided to separate tasks to be more efficient.
+
+### Lilian Hammache
+
+I started by creating a Discord bot in __Python__ via the [Discord Developer Portal](https://discord.com/developers/applications) and then used the __discord.py__ library to create the bot.
+
+![](@/images/vinbot.png)
+
+Subsequently, I stylized the messages sent by the bot to make them more pleasant to read.
+
+For example:
+
+![](@/images/exbotdiscord.png)
+
+Finally, an API to receive the sent _JSON_ files was set up. This API is in __Python__ and uses the __Flask__ framework.
+
+![](@/images/Flask.png)
+
+Once the API was set up, I was able to connect the Discord bot with the API. Thus, when the API receives a _JSON_ file, it forwards it to the Discord bot, which takes care of sending it to the Discord server.
+
+The Discord bot then sends a message to a specific channel with the article information.
+
+For example:
+
+![](@/images/discordChannel.png)
+
+The delay between the publication of the article and the sending of the message on the Discord server is **less than 5 seconds**.
+
+### <SparkleIcon /> Daily Task List
+
+- 🤖 Creation of the Discord bot
+- 📚 Creation of an API
+- 🔗 Connection of the API with the Discord bot
+
+### Antony Langlois
+
+For this second day, my objective was to set up an algorithm capable of identifying new articles published on Vinted.
+
+I decided to do this in JavaScript since it's a technology I'm very comfortable with.
+
+This involved setting up calls to all the necessary Vinted API routes for each catalog, with corresponding filters, recurrently to be able to compare the already existing articles with the new articles.
+
+My technique was to:
+1. Request the API route of the catalog with the corresponding filters
+
+![](@/images/params.png)
+
+2. Compare the last 10 articles with my list of already existing articles (which I had stored in a list with the previous call)
+3. If an article is not present in my list, then:
+
+    1. I request the API route to retrieve the article information.
+    2. With the article information, I retrieve the seller's ID and request the API route to obtain the seller's information.
+    3. I add it to my list of existing articles and send the retrieved and transformed information to the Discord bot API.
+
+To be able to do this continuously, it was necessary to generate new Bearer tokens to not be limited in time.
+
+Once the article information was retrieved, I had to transform it to make it consumable by the Discord bot API.
+
+![](@/images/payload.png)
+
+The algorithm worked for a minimal list of catalogs. However, to look for new articles in several dozens of catalogs, the Vinted API was blocking me due to too many requests.
+
+Indeed, each catalog corresponded to an API call to Vinted, and if I wanted to filter by different price ranges, it increased the number of requests.
+
+For example:
+- Men's Nike Sneakers under €25 = 1 request
+- Men's Nike Sneakers under €50 = 1 request
+- Men's Adidas Sneakers under €25 = 1 request
+- Men's Adidas Sneakers under €50 = 1 request
+
+As we can see here, the requests add up very quickly.
+
+For this, I was going to have to set up a pool of proxies to be able to make requests in parallel and from multiple IP addresses to avoid being blocked, something I plan to do for the last day.
+
+### <SparkleIcon /> Daily Task List
+
+- 🔍 Creation of the algorithm allowing to identify and retrieve information about new products created in real time
+- 🤓 Generation of bearer tokens to not be limited in time
+- 🔗 Preparation of the format of payloads to be sent to the Vinted bot
+- 🚨 Issue encountered: The Vinted API was blocking me due to too many requests
+
+---
+
+![](@/images/dark-mode.png)
+
+## Project Finalization {{ date: '2024-01-22T00:00Z' }}
+
+### Lilian Hammache
+
+For this last day, I fixed some minor bugs on the Discord bot and the API. Then I refactored the code to make it more readable and easier to maintain.
+
+Additionally, I implemented a logging system to track errors and requests made by the API.
+
+Finally, I set up a dictionary of Discord channels to be able to send messages to the channels corresponding to the catalogs.
+
+![](@/images/dico.png)
+
+### Antony Langlois
+
+For this last day, I set up a recurring retrieval of a proxy pool via [ProxyScrape](https://proxyscrape.com/free-proxy-list?ref=okemyeu&gad_source=1) for free.
+
+This allowed me to have about thirty new proxies every 5 minutes. And if an API request was blocked, instead of returning an error, I simply changed the proxy to make that request.
+
+I also switched programming languages to Python, keeping the same logic I had set up in JavaScript to make the production deployment easier.
+
+### <SparkleIcon /> Consolidation and Production Deployment
+
+Once the work was completed on both sides, we consolidated our work on a VPS.
+
+Thanks to our continuous communication regarding the project, the consolidation process went smoothly, and the production deployment was very quick.
+
+Moreover, the project was very easy to extend for new catalogs and filters.
+
+Here we are, amazed by our Discord sending messages automatically as soon as a new article is posted on Vinted.
