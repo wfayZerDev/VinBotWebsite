@@ -52,18 +52,14 @@ export function Intro() {
   return (
     <>
       <div>
-        <Link href="/">
-          <Logo className="inline-block h-8 w-auto" />
-        </Link>
       </div>
       <h1 className="mt-14 font-display text-4xl/tight font-light text-white">
         VinBot{' '}
         <span className="text-sky-300">Bot vinted</span>
       </h1>
       <p className="mt-4 text-sm/6 text-gray-300">
-        VinBot est un bot vinted qui permet de récupérer les annonces de vinted et de les afficher via un bot discord.
-      </p>
-      <span className="text-sky-300">Projet étudiant</span>
+      VinBot is a vinted bot that retrieves ads from vinted and displays them via a discord bot in real time.</p>
+      <span className="text-sky-300">Student project</span>
       <div className="mt-8 flex flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-x-2 lg:justify-start">
         <IconLink href="https://www.linkedin.com/in/lilian-hammache-71a491223/" icon={LinkedInIcon} target="_blank" className="flex-none">
           Lilian
